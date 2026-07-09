@@ -1187,51 +1187,13 @@ class Field {
   }
 
   _defaultLayout() {
-    const C = this._catalog();
-    const F = this._field();
-    const objs = [];
-    const placed = [];
-    const INX = F.W / 2 - F.T - 0.4;
-    const INZ = F.L / 2 - F.T - 0.4;
-    const GAP = 0.3;
-    const put = (x, z, s) => {
-      const o = { x, z, w: s.w, d: s.d, h: s.h, ry: 0, color: s.color };
-      if (s.shape) o.shape = s.shape;
-      objs.push(o); placed.push({ x, z, w: s.w, d: s.d }); return o;
-    };
-    const fits = (x, z, w, d) => {
-      if (x - w / 2 < -INX || x + w / 2 > INX || z - d / 2 < -INZ || z + d / 2 > INZ) return false;
-      for (const p of placed) {
-        if (Math.abs(x - p.x) < (w + p.w) / 2 + GAP && Math.abs(z - p.z) < (d + p.d) / 2 + GAP) return false;
-      }
-      return true;
-    };
-    const cx = F.W / 2 - F.T - C.container.w / 2 - 0.05;
-    [-1, 1].forEach((s) => { [-F.L / 2 + 5, 0, F.L / 2 - 5].forEach((z) => put(s * cx, z, C.container)); });
-    const lanes = [];
-    for (let x = -(INX - 0.4); x <= INX - 0.4 + 1e-6; x += 1.3) lanes.push(x);
-    const place = (s) => {
-      for (const lx of lanes) {
-        for (let z = -INZ + s.d / 2; z <= INZ - s.d / 2 + 1e-3; z += 0.35) {
-          if (fits(lx, z, s.w, s.d)) { put(lx, z, s); return true; }
-        }
-      }
-      for (let x = -INX; x <= INX; x += 0.3) {
-        for (let z = -INZ; z <= INZ; z += 0.3) {
-          if (fits(x, z, s.w, s.d)) { put(x, z, s); return true; }
-        }
-      }
-      return false;
-    };
-    const many = (n, s) => { for (let i = 0; i < n; i++) place(s); };
-    many(8, C.rack1); many(4, C.rack2); many(6, C.rack3);
-    many(4, C.air); many(2, C.balls); many(4, C.shelf); many(26, C.table);
-    return objs;
+    // Fixed starting arrangement (baked from the proportional catalogue layout).
+    return [{"x":-6.08,"z":-12,"w":2.5,"d":6,"h":2.5,"color":"#B23A2E"},{"x":-6.08,"z":0,"w":2.5,"d":6,"h":2.5,"color":"#B23A2E"},{"x":-6.08,"z":12,"w":2.5,"d":6,"h":2.5,"color":"#B23A2E"},{"x":6.08,"z":-12,"w":2.5,"d":6,"h":2.5,"color":"#B23A2E"},{"x":6.08,"z":0,"w":2.5,"d":6,"h":2.5,"color":"#B23A2E"},{"x":6.08,"z":12,"w":2.5,"d":6,"h":2.5,"color":"#B23A2E"},{"x":-6.58,"z":-6.43,"w":0.7,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-6.58,"z":5.47,"w":0.7,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-5.28,"z":-6.43,"w":0.7,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-5.28,"z":5.47,"w":0.7,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-3.98,"z":-14.48,"w":0.7,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-3.98,"z":-9.93,"w":0.7,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-3.98,"z":-5.38,"w":0.7,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-3.98,"z":-0.83,"w":0.7,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-2.68,"z":3.72,"w":1.5,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-2.68,"z":8.27,"w":1.5,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-2.68,"z":12.82,"w":1.5,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-1.38,"z":-14.48,"w":1.5,"d":4,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-1.38,"z":-10.93,"w":1.5,"d":2,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-1.38,"z":-8.48,"w":1.5,"d":2,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-1.38,"z":-6.03,"w":1.5,"d":2,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-1.38,"z":-3.58,"w":1.5,"d":2,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-1.38,"z":-1.13,"w":1.5,"d":2,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-0.08,"z":1.32,"w":1.5,"d":2,"h":2.5,"color":"#2E5FA3","shape":"tri"},{"x":-0.08,"z":3.77,"w":1,"d":2,"h":1,"color":"#C46A2A"},{"x":-0.08,"z":6.22,"w":1,"d":2,"h":1,"color":"#C46A2A"},{"x":-0.08,"z":8.67,"w":1,"d":2,"h":1,"color":"#C46A2A"},{"x":-0.08,"z":11.12,"w":1,"d":2,"h":1,"color":"#C46A2A"},{"x":-0.08,"z":13.57,"w":1,"d":2,"h":2,"color":"#3B7D4F"},{"x":1.22,"z":-15.48,"w":1,"d":2,"h":2,"color":"#3B7D4F"},{"x":1.22,"z":-13.03,"w":1,"d":2,"h":2,"color":"#2A2D33"},{"x":1.22,"z":-10.58,"w":1,"d":2,"h":2,"color":"#2A2D33"},{"x":1.22,"z":-8.13,"w":1,"d":2,"h":2,"color":"#2A2D33"},{"x":1.22,"z":-5.68,"w":1,"d":2,"h":2,"color":"#2A2D33"},{"x":1.22,"z":-3.23,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":1.22,"z":3.77,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":1.22,"z":6.22,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":1.22,"z":8.67,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":1.22,"z":11.12,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":1.22,"z":13.57,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":-15.48,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":-13.03,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":-10.58,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":-8.13,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":-5.68,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":-3.23,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":-0.78,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":1.67,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":4.12,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":6.57,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":9.02,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":11.47,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":2.52,"z":13.92,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":3.82,"z":-15.48,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":3.82,"z":-13.03,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":3.82,"z":-10.58,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":3.82,"z":-8.13,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":3.82,"z":-5.68,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":3.82,"z":-3.23,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"},{"x":3.82,"z":-0.78,"w":0.8,"d":2,"h":1,"color":"#DEDDD9"}].map((o) => ({ ...o, ry: o.ry || 0 }));
   }
 
   _loadLayout() {
     try {
-      const raw = localStorage.getItem('pb3d-layout-v1');
+      const raw = localStorage.getItem('pb3d-layout-v2');
       if (!raw) return null;
       const arr = JSON.parse(raw);
       if (!Array.isArray(arr) || !arr.length) return null;
@@ -1244,7 +1206,7 @@ class Field {
       });
     } catch (e) { return null; }
   }
-  _saveLayout() { try { localStorage.setItem('pb3d-layout-v1', JSON.stringify(this.layout)); } catch (e) {} }
+  _saveLayout() { try { localStorage.setItem('pb3d-layout-v2', JSON.stringify(this.layout)); } catch (e) {} }
 
   // ---------- scene ----------
   init() {
@@ -1505,7 +1467,7 @@ class Field {
     this.layout.push(it); this._select(this._makeMesh(it)); this._saveLayout();
   }
   _addCat(key) { const s = this._catalog()[key]; if (s) this._add(s.w, s.d, s.h, s.shape, s.color); }
-  _reset() { this._select(null); this.layout = this._defaultLayout(); this._buildBoxes(); try { localStorage.removeItem('pb3d-layout-v1'); } catch (e) {} }
+  _reset() { this._select(null); this.layout = this._defaultLayout(); this._buildBoxes(); try { localStorage.removeItem('pb3d-layout-v2'); } catch (e) {} }
 
   // ---------- keyboard ----------
   _onKey(e) {
